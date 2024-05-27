@@ -1,12 +1,14 @@
 package su.afk.commercestore.di
 
+//import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+//import retrofit2.converter.moshi.MoshiConverterFactory
 import su.afk.commercestore.data.network.service.ProductsService
 import javax.inject.Singleton
 import java.time.Duration
@@ -26,13 +28,14 @@ object NetworkModule {
             .build()
     }
 
+
     @Provides
     @Singleton
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://fakestoreapi.com/")
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
