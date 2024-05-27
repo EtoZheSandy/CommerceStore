@@ -63,7 +63,7 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.51.1")
 
     // Epoxy
-    implementation("com.airbnb.android:epoxy:4.6.3")
+    implementation("com.airbnb.android:epoxy:5.1.4")
 
 
     implementation(libs.androidx.core.ktx)
