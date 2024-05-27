@@ -7,7 +7,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import su.afk.commercestore.data.network.mapper.ProductMapper
 import su.afk.commercestore.data.network.service.ProductsService
@@ -31,16 +33,19 @@ class MainActivity : AppCompatActivity() {
 
         val controller = ProductEpoxyController()
         binding.epoxyRecycleView.setController(controller)
+        controller.setData(emptyList())
 
         lifecycleScope.launch {
             val response = productsService.getAllProducts()
-            Log.d("TAG", "${response.body()?.toString()}")
             val domainProducts: List<Product> = response.body()!!.map{
-                Log.d("TAG", "it: ${it}")
                 productMapper.mapFrom(productResponse = it)
-            }
+            } ?: emptyList()
 
             controller.setData(domainProducts)
+
+            if(domainProducts.isEmpty()) {
+                Snackbar.make(binding.root, "Feiled loading", Snackbar.LENGTH_LONG).show()
+            }
         }
 
 //        getData()

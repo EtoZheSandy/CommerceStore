@@ -65,6 +65,8 @@ dependencies {
     // Epoxy
     implementation("com.airbnb.android:epoxy:5.1.4")
 
+    // Более не поддерживается, мерцание для загрузки
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -74,8 +76,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-}
-
-kapt {
-    correctErrorTypes = true
 }

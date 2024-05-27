@@ -7,8 +7,12 @@ import su.afk.commercestore.domain.model.Product
 class ProductEpoxyController: TypedEpoxyController<List<Product>>() {
 
     override fun buildModels(data: List<Product>?) {
+
         if(data.isNullOrEmpty()) {
-            // todo loading data?
+            repeat(7) {
+                val epoxyId = 1 + it //id должен быть уникальным поэтому мы делаем приставку shimmer-it
+                ProductEpoxyModel(product = null).id(epoxyId).addTo(this)
+            }
             return
         }
 
