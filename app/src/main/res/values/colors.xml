@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="purge_100">#f3e8ef</color>
+    <color name="purge_300">#b98eb1</color>
+    <color name="purge_500">#802c6e</color>
+    <color name="purge_700">#33112c</color>
+    <color name="blue_200">#3A5FCC</color>
+    <color name="blue_600">#152E4C</color>
+</resources>
