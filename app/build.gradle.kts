@@ -68,6 +68,10 @@ dependencies {
     // Более не поддерживается, мерцание для загрузки
     implementation("com.facebook.shimmer:shimmer:0.5.0")
 
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

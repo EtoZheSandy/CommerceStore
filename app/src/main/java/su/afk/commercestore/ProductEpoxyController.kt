@@ -1,14 +1,12 @@
 package su.afk.commercestore
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 import kotlinx.coroutines.launch
-import su.afk.commercestore.domain.model.Product
 import su.afk.commercestore.domain.model.UiProduct
 
 class ProductEpoxyController(
-    private val viewModel: MainViewModel
+    private val viewModel: ProductsListViewModel
 ): TypedEpoxyController<List<UiProduct>>() {
 
     override fun buildModels(data: List<UiProduct>?) {
