@@ -13,11 +13,15 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import su.afk.commercestore.data.network.mapper.ProductMapper
 import su.afk.commercestore.data.network.service.ProductsService
 import su.afk.commercestore.databinding.ActivityMainBinding
 import su.afk.commercestore.domain.model.Product
+import su.afk.commercestore.domain.model.UiProduct
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,19 +37,31 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val controller = ProductEpoxyController()
+        val controller = ProductEpoxyController(viewModel = viewModel)
         binding.epoxyRecycleView.setController(controller)
         controller.setData(emptyList())
 
+        // обьединение flow
+        combine(
+            viewModel.store.stateFlow.map { it.product },
+            viewModel.store.stateFlow.map { it.favoriteProductIds }
+        ) { listOfProduct, setOfFavoriteProduct ->
+            listOfProduct.map { product ->
+                UiProduct(product = product, isFavorite = setOfFavoriteProduct.contains(product.id))
+            }
+        }.distinctUntilChanged().asLiveData().observe(this){ uiProduct ->
+            controller.setData(uiProduct)
+        }
+
 
 //        viewModel.productLiveData.observe(this){ listProduct ->
-        viewModel.store.stateFlow.asLiveData().observe(this){ state ->
-            controller.setData(state.product)
+//        viewModel.store.stateFlow.asLiveData().observe(this){ state ->
+//            controller.setData(state.product)
 
-            if(state.product.isEmpty()) {
-                Snackbar.make(binding.root, "Feiled loading", Snackbar.LENGTH_LONG).show()
-            }
-        }
+//            if(state.product.isEmpty()) {
+//                Snackbar.make(binding.root, "Feiled loading", Snackbar.LENGTH_LONG).show()
+//            }
+//        }
         viewModel.refreshProduct()
     }
 

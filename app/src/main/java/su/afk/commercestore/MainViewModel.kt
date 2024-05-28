@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import su.afk.commercestore.data.network.ProductRepository
 import su.afk.commercestore.data.network.service.ProductsService
@@ -19,13 +20,9 @@ class MainViewModel @Inject constructor(
     val store: Store<ApplicationState>
 ): ViewModel() {
 
-//    private val _productLiveData = MutableLiveData<List<Product>>()
-//    val productLiveData: LiveData<List<Product>> = _productLiveData
-
     fun refreshProduct() {
         viewModelScope.launch {
             val products = productRepository.getAllProducts()
-//                _productLiveData.value = products
             store.update { applicationState ->
                 return@update applicationState.copy(
                     product = products
