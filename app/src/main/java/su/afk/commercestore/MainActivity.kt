@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.google.android.material.snackbar.Snackbar
@@ -19,12 +22,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    @Inject lateinit var productsService: ProductsService
-
-    @Inject lateinit var productMapper: ProductMapper
-
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,38 +37,19 @@ class MainActivity : AppCompatActivity() {
         binding.epoxyRecycleView.setController(controller)
         controller.setData(emptyList())
 
-        lifecycleScope.launch {
-            val response = productsService.getAllProducts()
-            val domainProducts: List<Product> = response.body()!!.map{
-                productMapper.mapFrom(productResponse = it)
-            } ?: emptyList()
 
-            controller.setData(domainProducts)
+//        viewModel.productLiveData.observe(this){ listProduct ->
+        viewModel.store.stateFlow.asLiveData().observe(this){ state ->
+            controller.setData(state.product)
 
-            if(domainProducts.isEmpty()) {
+            if(state.product.isEmpty()) {
                 Snackbar.make(binding.root, "Feiled loading", Snackbar.LENGTH_LONG).show()
             }
         }
-
-//        getData()
-//        setupListener()
+        viewModel.refreshProduct()
     }
 
-//    private fun getData() {
-//        lifecycleScope.launch {
-//            binding.progressBar.isVisible = true
-//            val response = productsService.getAllProducts()
-//            binding.cardImage.load(
-//                data = "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg"
-//            ) {
-//                listener{ request, result ->
-//                    binding.progressBar.isGone = true
-//                }
-//            }
-//            Log.d("TAG", "${response.body()?.toString()}")
-//        }
-//    }
-//
+
 //    private fun setupListener()= with(binding) {
 //        cardView.setOnClickListener {
 //            tvDescription.apply {
